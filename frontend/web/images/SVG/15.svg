@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X8 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="27.7777mm" height="31.6599mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 23537 26826"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:#2B2A29;stroke-width:502.128;stroke-linecap:round;stroke-linejoin:round}
+    .fil0 {fill:none}
+   ]]>
+  </style>
+ </defs>
+ <g id="Слой_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_2572656457568">
+   <path class="fil0 str0" d="M14119 5796c2886,2885 5771,5771 8657,8657 680,680 680,1793 0,2473 -3055,3054 -6109,6108 -9163,9162 -649,650 -1711,650 -2361,0 -2979,-2979 -5958,-5958 -8937,-8937 -2411,-2411 -2142,-3153 -1936,-4397 158,-950 321,-1899 481,-2848 115,-682 230,-1364 345,-2045 363,-2319 1107,-3100 3324,-3387 707,-119 1414,-238 2121,-357 1006,-170 2000,-450 3018,-510 1890,-112 2360,98 4451,2189z"/>
+   <path class="fil0 str0" d="M12433 24719c3010,-3010 6020,-6020 9030,-9030 -2873,-2873 -5746,-5745 -8619,-8618 -377,-377 -1435,-1481 -1965,-1633 -298,-86 -800,-49 -1105,-31 -933,55 -1899,331 -2824,487 -707,119 -1414,239 -2121,358l-34 6 -35 4c-1441,186 -1545,443 -1775,1882 -109,689 -232,1375 -348,2062 -159,948 -322,1895 -479,2843 -37,219 -89,461 -103,681 -36,605 1170,1782 1534,2146 2948,2948 5896,5896 8844,8843z"/>
+   <circle class="fil0 str0" transform="matrix(0.752198 -0.752198 0.752198 0.752198 6541.57 9797.41)" r="1420"/>
+   <line class="fil0 str0" x1="6542" y1="9797" x2="6542" y2= "251" />
+   <line class="fil0 str0" x1="12925" y1="19383" x2="12925" y2= "12753" />
+   <circle class="fil0 str0" transform="matrix(0.514603 -0.514603 0.514603 0.514603 10535.1 16097)" r="1420"/>
+   <circle class="fil0 str0" transform="matrix(0.514603 -0.514603 0.514603 0.514603 15363.4 15993.8)" r="1420"/>
+  </g>
+ </g>
+</svg>

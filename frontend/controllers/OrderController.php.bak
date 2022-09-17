@@ -1,0 +1,272 @@
+<?php
+namespace frontend\controllers;
+
+use yii\web\Controller;
+use common\models\Users;
+use common\models\Order;
+use common\models\OrdersMain;
+use common\models\OrderContents;
+use common\models\ClientCommon;
+use common\models\ClientJurData;
+use common\models\ClientFizData;
+use common\models\Goods;
+use common\models\Basket;
+use Yii;
+
+class OrderController extends Controller {
+    
+    public function actionIndex(){
+        $session = Yii::$app->session;
+        $session->open();
+        
+        $basket = (new Basket())->getBasket();
+
+        if($_SESSION['usere']){
+    	    $userdata = ClientCommon::find()
+    	    ->where(['client_id' => $_SESSION['usere']])
+    	    ->asArray()
+    	    ->one();
+    	    $order['type'] = $userdata['client_type'];
+    		$order['email'] = $userdata['email'];
+    		$order['numberphone'] = $userdata['phone'];
+    		if($userdata['client_type'] == 'fiz'){
+                $clientdata = ClientFizData::find()
+                ->where(['client_id' => $userdata])
+                ->one();
+        		$order['name'] = $clientdata['firstname'];
+        		$order['contactface'] = $clientdata['firstname'];
+    	    }elseif($userdata['client_type'] == 'jur'){
+                $clientdata = ClientJurData::find()
+                ->where(['client_id' => $userdata])
+                ->one();
+        		$order['namecompany'] = $clientdata['title_full'];
+        		$order['inn'] = $clientdata['inn'];
+        		$order['contactface'] = $clientdata['director_fio'];
+        		$order['client_id'] = $clientdata['client_id'];
+    	    }
+            $session->set('order', $order);
+    	}
+    	
+        return $this->render('index', ['basket' => $basket, 'order' => $order]);
+    }
+    
+    public function actionComplete() {
+        
+        $session = Yii::$app->session;
+        $session->open();
+        $i=0;
+        $str = '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="top"><table cellpadding="10" cellspacing="0" width="100%" border="0"><tbody><tr><td colspan="2" valign="top"><table width="100%" cellspacing="0" border="0" cellpadding="6" style="font-size:11pt;margin-top:40px;"><tbody><tr><td style="font-weight:bolder;color:Gray;">№</td><td style="font-weight:bolder;color:Gray;">НАИМЕНОВАНИЕ</td><td style="font-weight:bolder;color:Gray;">ЦЕНА, P.</td><td style="font-weight:bolder;color:Gray;">КОЛИЧЕСТВО</td><td style="font-weight:bolder;color:Gray;">СУММА, Р.</td></tr>';           
+        foreach ($_SESSION['basket']['products'] as $id => $item):
+        $i++;
+        $str .= '<tr><td align="center" style="border:1px solid silver;">'.$i.'</td><td align="center" style="border:1px solid silver;">'.$item["name"].'</td><td align="center" style="border:1px solid silver;" class="price_jq">'.$item["price"].'</td><td align="center" style="border:1px solid silver;">'.$item["count"].'</td> <td align="center" style="border:1px solid silver;"><b style="color:Orange;" class="cart_total_price">'.$item["price"] * $item["count"].'руб.</b></td></tr>';                                                 
+        endforeach; 
+
+        $str .='<tr><td colspan="3" align="left"><b style="color:Gray;">ИТОГО:</b><b style="color:Orange;" id="total">'.$_SESSION['basket']['amount'];
+        $str .=' руб.</b></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table><div class="row border"><div class="col-12"><h3 class="text-uppercase ml-2 mt-3 mb-3">Контактные данные</h5></div><div class="text-right font-weight-bold"><p>Адрес и удобная дата доставки: '.$_SESSION['order']['address'].$_SESSION['order']['datetime'];
+        $str .='</p></div><div class="col-3 text-right font-weight-bold"><p>Способ оплаты: ';
+                                if($_SESSION['order']['payment'] == 'online'){
+                                    $str .='Онлайн';
+                                }elseif($_SESSION['order']['payment'] == 'requisites'){
+                                    $str .='Оплата по выставлении реквизитов';
+                                }elseif($_SESSION['order']['payment'] == 'office'){
+                                    $str .='Оплата в офисах компании';
+                                }elseif($_SESSION['order']['payment'] == 'uponreceipt'){
+                                    $str .='Оплата при получении';
+                                }
+        $str .='</p></div><div class="col-3 text-right font-weight-bold"><p>Имя: '.$_SESSION['order']['contactface'].'</p></div>';
+        $str .='<div class="col-3 text-right font-weight-bold"><p>Телефон: '.$_SESSION['order']['numberphone'].'</p></div>';
+        $str .='<div class="col-3 text-right font-weight-bold"><p>Email: '.$_SESSION['order']['email'].'</p></div>';
+        $order = (new Order())->completeOrder();
+        
+        if($order == 'true'){
+            $headers = array(
+                'From' => 'webmaster@example.com',
+                'Reply-To' => 'webmaster@example.com',
+                'X-Mailer' => 'PHP/' . phpversion()
+            );
+            $orid = OrdersMain::find()
+            ->where(['client_id' => $_SESSION['usere']])
+            ->orderBy('order_id DESC')
+            ->one();
+            $str .='<div class="col-3 text-right font-weight-bold"><p>Номер заказа: '.$orid->order_id.'</p></div>';
+            $str .='</div>';
+            if(!empty($_SESSION['order']['password'])){
+                $str .= '<div class="col-3 text-right font-weight-bold"><p>Ваш пароль:</p><p style="font-weight: 700; color: #dd1111;">'.$_SESSION['order']['password'].'</p></div>';
+            }
+           
+                $cli = ClientCommon::find()
+                ->where(['client_id' => $_SESSION['usere']])
+                ->one();
+                $mami = 0; 
+                if($cli->client_type == "jur"){
+                    if($cli->client_approved == 1){
+                       $mami = 1; 
+                    }
+                }else{
+                       $mami = 1; 
+                }
+                
+                if($mami == 1){
+                    Yii::$app->mailer->compose()
+                    ->setFrom(['uraldekor@beauty-crm.ru' => 'Урал Декор'])
+                    ->setTo($_SESSION['order']['email'])
+                    ->setSubject('Новый заказ на сайте')
+                    ->setTextBody('Вами был совершен заказ на сайте УралДекор')
+                    ->setHtmlBody($str)
+                    ->send();
+                        //mail($user->email, 'Новый заказ на сайте', $str, $headers);
+                    $users = Users::find()
+                    ->where(['email_notification'=>1])
+                    ->all();
+                    foreach($users as $user){
+                        Yii::$app->mailer->compose()
+                        ->setFrom(['uraldekor@beauty-crm.ru' => 'Урал Декор'])
+                        ->setTo($user->email)
+                        ->setSubject('Новый заказ на сайте')
+                        ->setTextBody('Был совершен заказ на сайте УралДекор')
+                        ->setHtmlBody($str)
+                        ->send();
+                        //mail($user->email, 'Новый заказ на сайте', $str, $headers);
+                    }
+                }else{
+                    $str = "<span style='color: red;'>ВНИМАНИЕ! Заказ создан на сайте, но НЕ БЫЛ отправлен в 1С. Чтобы он был отправлен в 1С, вам необходимо подтвердить реквизиты клиента-юридического лица, отредактировав его в ПУС Сайта. После этого, в течении 10 минут заказ появиться в 1С.</span>" . $str;
+                    $users = Users::find()
+                    ->where(['email_notification'=>1])
+                    ->all();
+                    foreach($users as $user){
+                        Yii::$app->mailer->compose()
+                        ->setFrom(['uraldekor@beauty-crm.ru' => 'Урал Декор'])
+                        ->setTo($user->email)
+                        ->setSubject('Новый заказ на сайте')
+                        ->setTextBody('Был совершен заказ новым клиентом на сайте УралДекор')
+                        ->setHtmlBody($str)
+                        ->send();
+                        //mail($user->email, 'Новый заказ на сайте', $str, $headers);
+                    }
+                }
+            
+            return $this->render('complete', ['orid' => $orid->order_id]);
+        }else{
+            return $this->render('index');
+        }
+    }
+
+    public function actionProductMethod() {
+	    $session = Yii::$app->session;
+    	$session->open();
+
+        if (!$session->has('order')) {
+            $session->set('order', []);
+        } else {
+		    $order = $session->get('order');
+        }
+        
+        if($_POST['delivery'] == 'courier'){
+            if(!empty($_POST['city'])&!empty($_POST['street'])&!empty($_POST['numh'])){
+	            $order['delivery'] = 1;
+	            $order['address'] = $_POST['city'].', улица '.$_POST['street'].', дом '.$_POST['numh'];
+	            //$order['comment'] = $_POST['comment'];
+	            //$order['datetime'] = $_POST['datetime'];
+            }else{ 
+                return 'Заполните адрес доставки';
+            }
+        }else{
+            $order['delivery'] = 0;
+            $order['address'] = 'Склад на Туркестанской 68';
+            if($_POST['delivery'] == 'selfgeturk'){
+                $order['address'] = 'Склад на Юркина 9а';
+            }elseif($_POST['delivery'] == 'selfgetturk'){
+                $order['address'] = 'Склад на Туркестанской 68';
+            }
+        }
+
+	    $session->set('order', $order);
+	    
+	    return true;
+    }
+
+    public function actionPaymentMethod() {
+	    $session = Yii::$app->session;
+    	$session->open();
+
+	    if (!$session->has('order')) {
+            $session->set('order', []);
+	    } else {
+		    $order = $session->get('order');
+	    }
+	    $order['payment'] = 'office';
+        if(!empty($_POST['payment'])){
+    	    $order['payment'] = $_POST['payment'];
+    	    $session->set('order', $order);
+        }
+
+        return true;
+    }
+    
+    public function actionContactInformationLegal() {
+    	$session = Yii::$app->session;
+    	$session->open();
+    	
+    	if (!$session->has('order')) {
+            $session->set('order', []);
+    	} else {
+    		$order = $session->get('order');
+    	}
+    
+    	if(!empty($_POST['type'])){
+    	    $order['type'] = $_POST['type'];
+    		$order['namecompany'] = $_POST['companyname'];
+    		$order['inn'] = $_POST['inn'];
+    		$order['numberphone'] = $_POST['telephone'];
+    		$order['email'] = $_POST['email'];
+    		$order['contactface'] = $_POST['contactname'];
+    		$order['password'] = $_POST['password'];
+    	        $session->set('order', $order);
+            $responce = ClientCommon::find()
+             ->where(['email'=>$order['email']])
+             ->orWhere(['phone'=>$order['numberphone']])
+             ->one();
+             if((!empty($responce['email']))){
+                return "Пользователь с данным номером телефона или электронным адресом уже существует!";
+             }else{
+    			return true;
+             }
+    	}
+        return false;
+    }
+
+    public function actionContactInformationPrivate() {
+    	$session = Yii::$app->session;
+    	$session->open();
+    
+    	if (!$session->has('order')) {
+            $session->set('order', []);
+    	} else {
+    		$order = $session->get('order');
+    	}
+    
+    	if(!empty($_POST['type'])){
+    	    $order['type'] = $_POST['type'];
+    		$order['name'] = $_POST['contactname'];
+    		$order['email'] = $_POST['email'];
+    		$order['numberphone'] = $_POST['telephone'];
+    		$order['contactface'] = $_POST['contactname'];
+    		$order['password'] = $_POST['password'];
+    	        $session->set('order', $order);
+            $responce = ClientCommon::find()
+             ->where(['email'=>$order['email']])
+             ->orWhere(['phone'=>$order['numberphone']])
+             ->one();
+             if(!empty($responce['email']) & empty($_SESSION['usere'])){
+                 return "Пользователь с данным номером телефона или электронным адресом уже существует!";
+             }else{
+    	        return true;
+             }
+    	}
+        return false;
+    }
+    
+    public function actionFailure(){
+        return $this->render('fail');
+    }
+}

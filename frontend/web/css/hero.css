@@ -1,0 +1,350 @@
+.feature .box-25 {
+  padding: 15px 30px 15px 15px;
+}
+.feature img {
+  width: 25px;
+}
+
+@media screen and (max-width: 960px) {
+  .hero {
+    padding: 200px 0 180px;
+  }
+}
+
+.single-product {
+  padding: 30px 0 50px 0;
+  background-color: #fff;
+}
+.single-product .box-left {
+  width: 22%;
+}
+.single-product .box-right {
+  width: 78%;
+}
+.single-product .box {
+  position: relative;
+  width: 100%;
+  padding: 2px 4px;
+}
+
+.box-main {
+}
+
+.single-product .box img {
+  position: relative;
+  width: 100%;
+}
+
+.single-product .product-content {
+  padding: 25px 25px 25px 70px !important;
+}
+
+.single-product h1 {
+  font-size: 2.4rem;
+}
+
+.single-product h5 {
+  padding-top: 30px;
+  margin: 30px 0;
+}
+
+.single-product .available {
+  margin-left: 26px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  background-color: var(--white);
+  box-shadow: 2px 2px 15px rgba(100, 100, 100, 0.1);
+}
+
+.single-product .price {
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+.single-product .features .box-50 {
+  padding: 5px 0;
+}
+
+.single-product .btn-group {
+  margin: 50px 0;
+}
+.single-product .count-panel__btn {
+  position: relative;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  pointer-events: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
+.single-product input {
+  border-radius: 0px;
+  border: 1px solid rgba(100, 100, 100, 0.4);
+  width: 50px;
+  padding-left: 1em;
+  width: 100%;
+  padding: 4px;
+  margin: 0 auto;
+  max-width: 40px;
+  text-align: center;
+}
+
+dl {
+  position: relative;
+  line-height: 1.7rem;
+  margin-bottom: 0;
+  margin-top: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 97%;
+  padding: 5px 0;
+}
+
+dt {
+  font-weight: 600;
+}
+
+.dt-dotted {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.dt-dotted > span {
+  position: relative;
+}
+
+.dt-dotted > span:after {
+  color: #000;
+  content: "...........................................................................................................................................";
+  left: 100%;
+  position: absolute;
+  top: 0;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+dd {
+  margin-left: 0;
+  position: absolute;
+  right: 0;
+  background-color: #fff;
+}
+
+.dl-inline > dt {
+  clear: left;
+  float: left;
+  margin-right: 5px;
+  overflow: hidden;
+}
+
+.dl-inline > dd {
+  display: inline-block;
+  margin-left: 0;
+}
+
+.single-product .product-footer {
+  margin-top: 50px;
+}
+
+.single-product .product-footer .box-product {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  font-size: 0.9rem;
+  margin-right: 25px;
+  cursor: pointer;
+}
+.single-product .product-footer img {
+  width: 30px;
+  margin-right: 10px;
+}
+@media screen and (max-width: 1000px) {
+  .single-product .product-content {
+    padding: 0px !important;
+  }
+}
+/*}
+
+a.btn-outline {*/
+a.btn-outline {
+  padding: 15px 30px;
+  font-size: var(--p-fs);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.2s all ease-in-out;
+  color: var(--white) !important;
+  border: solid 1px var(--black);
+  background-color: transparent;
+  margin: 0 20px 0 0 !important;
+}
+a.btn-outline:hover {
+  background-color: var(--black);
+  color: var(--white);
+}
+
+a.btn-outline {
+  background-color: var(--black);
+  color: var(--white);
+  border: solid 1px var(--black);
+}
+a.btn-outline:hover {
+  background-color: transparent;
+  color: var(--black) !important;
+}
+
+/* slider */
+
+section.slider {
+  position: relative;
+  width: calc(100% - 80px);
+  margin: 0 auto;
+  height: calc(100vh - 130px);
+  background-color: rgb(238, 238, 238);
+}
+
+.splide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+section.slider .splide__track,
+section.slider .splide__list {
+  height: 100%;
+}
+
+section.slider .splide img {
+  position: relative;
+  object-fit: cover;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+}
+
+section.slider .splide__slide {
+  display: flex;
+  align-items: center;
+}
+
+section.slider .splide__arrow {
+  width: 3em !important;
+  height: 3em !important;
+  background-color: #000 !important;
+}
+
+.splide__arrow svg {
+  fill: #fff !important;
+}
+
+section.slider .splide .splide__content {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 8vw;
+  color: #fff;
+}
+
+section.slider .splide .splide__content h2 {
+  font-size: 3.5rem;
+}
+
+.splide .splide__content span {
+  background-color: red;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+section.slider .splide .splide__content p {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  width: 80%;
+}
+
+section.slider .splide .splide__content .btn {
+  margin-top: 50px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #fff;
+}
+
+section.slider .splide .splide__content .btn:hover {
+  margin-top: 50px;
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+section.partners {
+  position: relative;
+  width: calc(100% - 120px);
+  margin: 0 auto;
+}
+section.partners img {
+  position: relative;
+  width: 60%;
+  filter: grayscale(0);
+}
+
+section.partners .splide__slide {
+  box-sizing: border-box;
+  list-style-type: none !important;
+  margin: 0;
+  flex-shrink: 0;
+  padding: 40px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #f4f4f4;
+  overflow: hidden;
+  height: 200px;
+}
+
+section.partners .splide__slide:hover img {
+  transition: all 0.2s ease-in-out;
+  width: 70%;
+}
+
+@media screen and (max-width: 1100px) {
+  /*slider*/
+  section.slider {
+    width: 100%;
+    margin: 0 auto;
+    height: auto;
+  }
+
+  section.slider .splide__arrow {
+    display: none;
+  }
+  .inner-header {
+    height: 80px !important;
+  }
+  section.slider .splide__slide {
+    padding: 100px 0 100px 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  /*slider*/
+
+  section.slider .splide .splide__content h2 {
+    font-size: 3.2rem;
+  }
+  section.slider .splide .splide__content p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    width: 100%;
+  }
+
+  section.partners img {
+    width: 90%;
+  }
+
+  section.partners .splide__slide {
+    height: 180px;
+  }
+}
